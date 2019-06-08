@@ -14,7 +14,7 @@
     - ./vars/default_vars.yml
 
   tasks:
-    - name: Check to see if acl_entries_to_apply.csv exists
+    - name: Check to see if fmc_acl_entries_to_apply.csv exists
       stat:
         path: "/home/{{ ansible_user }}/csvfiles/fmc_acl_entries_to_apply.csv"
       register: fmc_acl_entries_output

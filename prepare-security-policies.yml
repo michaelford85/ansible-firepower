@@ -16,8 +16,8 @@
 
     - name: Get acl_entries csv file from webserver
       fetch:
-         src: "/home/{{ ansible_user }}/csvfiles/acl_entries_to_apply.csv"
-         dest: "{{ playbook_dir }}/csvfiles/acl_entries_to_apply.csv"
+         src: "/home/{{ ansible_user }}/csvfiles/fmc_acl_entries_to_apply.csv"
+         dest: "{{ playbook_dir }}/csvfiles/fmc_acl_entries_to_apply.csv"
          flat: yes
 
 
@@ -26,24 +26,24 @@
   gather_facts: False
   become: yes
   vars:
-    csvfile: "{{ lookup('file', '{{ playbook_dir }}/csvfiles/acl_entries_to_apply.csv') }}"
+    csvfile: "{{ lookup('file', '{{ playbook_dir }}/csvfiles/fmc_acl_entries_to_apply.csv') }}"
 
   vars_files:
     - ./vars/default_vars.yml
 
   tasks:
-    - name: Check to see if acl_entries.yml exists
+    - name: Check to see if fmc_acl_entries.yml exists
       stat:
-        path: "{{ playbook_dir }}/vars/acl_entries.yml"
-      register: acl_entries_output
+        path: "{{ playbook_dir }}/vars/fmc_acl_entries.yml"
+      register: fmc_acl_entries_output
 
-    - name: Delete acl_entries.yml if it already exists
+    - name: Delete fmc_acl_entries.yml if it already exists
       file:
-        path: "{{ playbook_dir }}/vars/acl_entries.yml"
+        path: "{{ playbook_dir }}/vars/fmc_acl_entries.yml"
         state: absent
-      when: acl_entries_output.stat.exists == True
+      when: fmc_acl_entries_output.stat.exists == True
 
-    - name: Create acl_entries.yml file from template
+    - name: Create fmc_acl_entries.yml file from template
       template:
-        src: "{{ playbook_dir }}/templates/acl_entries.j2"
-        dest: "{{ playbook_dir }}/vars/acl_entries.yml"
+        src: "{{ playbook_dir }}/templates/fmc_acl_entries.j2"
+        dest: "{{ playbook_dir }}/vars/fmc_acl_entries.yml"
