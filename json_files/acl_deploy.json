@@ -1,0 +1,7 @@
+{
+  "type": "DeploymentRequest",
+  "version": "",
+  "forceDeploy": true,
+  "ignoreWarning": true,
+  "deviceList": []
+}

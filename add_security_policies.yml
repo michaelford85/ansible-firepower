@@ -1,0 +1,70 @@
+---
+- name: Add Security Policies to Cisco Firepower NGFWs
+  hosts: localhost
+  gather_facts: no
+  vars_files:
+    - ./vars/default_vars.yml
+    - ./credentials/firepower_credentials.yml
+
+  tasks:
+    #This Authentication Token will be used for all subsequent API calls to FMC
+    - name: Generate Authentication Key and Domain UUID
+      uri:
+        url: "https://{{ fmc_fqdn }}/api/fmc_platform/v1/auth/generatetoken"
+        user: "{{ FMC_USERNAME }}"
+        password: "{{ FMC_PASSWORD }}"
+        method: POST
+        force_basic_auth: yes
+        validate_certs: no
+        status_code: 204
+      register: auth_output
+
+    # - name: Print Authentication Output
+    #   debug:
+    #     var: auth_output
+
+    - name: Set Authentication Key Fact
+      set_fact:
+        auth_token: "{{ auth_output.x_auth_access_token }}"
+        domain_uuid: "{{ auth_output.domain_uuid }}"
+
+    - name: Print out Auth Token and Domain UUID
+      debug:
+        msg: "Auth token is {{ auth_token }}, Domain UUID is {{ domain_uuid }}"
+
+    - name: Get a list of all Access Policies
+      uri:
+        url: "https://{{ fmc_fqdn }}/api/fmc_config/v1/domain/{{ domain_uuid }}/policy/accesspolicies"
+        method: GET
+        headers:
+          accept: application/json
+          X-auth-access-token: "{{ auth_token }}"
+        validate_certs: no
+      register: policies_output
+
+    - name: Print Access Policies
+      debug:
+        var: policies_output
+
+    # FTDv-Policy Container ID is 0603BD5B-FEB8-0ed3-0000-012884901994
+    - name: Generate JSON file
+      template:
+        src: ./templates/new_acl.j2
+        dest: ./new_acl.json
+
+    - name: Apply Security Policy
+      uri:
+        url: "https://{{ fmc_fqdn }}/api/fmc_config/v1/domain/{{ domain_uuid }}/policy/accesspolicies/{{ container_id }}/accessrules"
+        method: PUT
+        headers:
+          Accept: application/json
+          Content-Type: application/json
+          X-auth-access-token: "{{ auth_token }}"
+        src: ./new_acl.json
+        status_code: 201
+        validate_certs: no
+
+    - name: Delete Dynamically Generated JSON file
+      file:
+        path: ./new_acl.json
+        state: absent
