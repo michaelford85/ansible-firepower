@@ -1,6 +1,37 @@
 [
 {% for item in csvfile.split("\n") %}
-{%   if loop.index != 1 %}
+{%   if loop.index != 1 && if not loop.last %}
+{%     set list = item.split(",") %}
+  {
+    "action": "{{ list[4]|trim() }}",
+    "enabled": true,
+    "type": "AccessRule",
+    "name": "{{ list[0]|trim() }}",
+    "logFiles": false,
+    "logBegin": false,
+    "logEnd": false,
+    "sourceNetworks": {
+      "literals": [
+        {
+          "type": "Network",
+          "value": "{{ list[2]|trim() }}"
+        }
+      ]
+    },
+    "destinationNetworks": {
+      "literals": [
+        {
+          "type": "Network",
+          "value": "{{ list[3]|trim() }}"
+        }
+      ]
+    },
+    "newComments": [
+      "Rule Add by Ansible"
+    ]
+  },
+{%   endif %}
+{%   elif loop.last  %}
 {%     set list = item.split(",") %}
   {
     "action": "{{ list[4]|trim() }}",
@@ -30,6 +61,6 @@
       "Rule Add by Ansible"
     ]
   }
-  {%   endif %}
-  {% endfor %}
+{%   endif %}
+{% endfor %}
 ]
