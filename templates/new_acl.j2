@@ -1,8 +1,8 @@
 {
-  "action": "{{ action }}",
+  "action": "{{ item.action }}",
   "enabled": true,
   "type": "AccessRule",
-  "name": "{{ rule_name }}",
+  "name": "{{ item.rule_name }}",
   "logFiles": false,
   "logBegin": false,
   "logEnd": false,
@@ -10,7 +10,7 @@
     "literals": [
       {
         "type": "Network",
-        "value": "{{ source_ip }}"
+        "value": "{{ item.source_ip }}"
       }
     ]
   },
@@ -18,7 +18,7 @@
     "literals": [
       {
         "type": "Network",
-        "value": "{{ destination_ip }}"
+        "value": "{{ item.destination_ip }}"
       }
     ]
   },
