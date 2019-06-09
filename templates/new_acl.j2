@@ -1,6 +1,6 @@
 [
 {% for item in csvfile.split("\n") %}
-{%   if loop.index != 1 && if not loop.last %}
+{%   if (loop.index != 1) and (not loop.last) %}
 {%     set list = item.split(",") %}
   {
     "action": "{{ list[4]|trim() }}",
