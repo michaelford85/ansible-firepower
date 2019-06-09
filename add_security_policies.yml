@@ -72,13 +72,13 @@
     - name: Apply Security Policy
       uri:
         url: "https://{{ fmc_fqdn }}/api/fmc_config/v1/domain/{{ domain_uuid }}/policy/accesspolicies/{{ container_id }}/accessrules?bulk=true"
-        method: PUT
+        method: POST
         headers:
           Accept: application/json
           Content-Type: application/json
           X-auth-access-token: "{{ auth_token }}"
         src: "{{ playbook_dir }}/new_acl.json"
-        status_code: 201
+        status_code: 200
         validate_certs: no
     - name: Delete Dynamically Generated JSON file
       file:
