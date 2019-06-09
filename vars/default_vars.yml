@@ -4,3 +4,4 @@ FMC_USERNAME: "{{ vaulted_firepower_username }}"
 FMC_PASSWORD: "{{ vaulted_firepower_password }}"
 fmc_fqdn: "{{ vaulted_firepower_fqdn }}"
 container_id: 0603BD5B-FEB8-0ed3-0000-012884901994
+webserver_fqdn: webserver.michaelanthonyford.com
