@@ -6,7 +6,7 @@ acl_entries:
   - rule_name: {{ list[0]|trim() }}
     description: {{ list[1]|trim() }}
     source_ip: {{ list[2]|trim() }}
-    destination_zone: {{ list[5]|trim() }}
-    action: {{ list[6]|trim() }}
+    destination_ip: {{ list[3]|trim() }}
+    action: {{ list[4]|trim() }}
 {%   endif %}
 {% endfor %}
