@@ -1,0 +1,28 @@
+{
+  "action": "{{ item.action }}",
+  "enabled": true,
+  "type": "AccessRule",
+  "name": "{{ item.rule_name }}",
+  "logFiles": false,
+  "logBegin": false,
+  "logEnd": false,
+  "sourceNetworks": {
+    "literals": [
+      {
+        "type": "Network",
+        "value": "{{ item.source_ip }}"
+      }
+    ]
+  },
+  "destinationNetworks": {
+    "literals": [
+      {
+        "type": "Network",
+        "value": "{{ item.destination_ip }}"
+      }
+    ]
+  },
+  "newComments": [
+    "Rule Add by Ansible"
+  ]
+}

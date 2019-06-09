@@ -1,28 +1,35 @@
-{
-  "action": "{{ item.action }}",
-  "enabled": true,
-  "type": "AccessRule",
-  "name": "{{ item.rule_name }}",
-  "logFiles": false,
-  "logBegin": false,
-  "logEnd": false,
-  "sourceNetworks": {
-    "literals": [
-      {
-        "type": "Network",
-        "value": "{{ item.source_ip }}"
-      }
+[
+{% for item in csvfile.split("\n") %}
+{%   if loop.index != 1 %}
+{%     set list = item.split(",") %}
+  {
+    "action": "{{ list[4]|trim() }}",
+    "enabled": true,
+    "type": "AccessRule",
+    "name": "{{ list[0]|trim() }}",
+    "logFiles": false,
+    "logBegin": false,
+    "logEnd": false,
+    "sourceNetworks": {
+      "literals": [
+        {
+          "type": "Network",
+          "value": "{{ list[2]|trim() }}"
+        }
+      ]
+    },
+    "destinationNetworks": {
+      "literals": [
+        {
+          "type": "Network",
+          "value": "{{ list[3]|trim() }}"
+        }
+      ]
+    },
+    "newComments": [
+      "Rule Add by Ansible"
     ]
-  },
-  "destinationNetworks": {
-    "literals": [
-      {
-        "type": "Network",
-        "value": "{{ item.destination_ip }}"
-      }
-    ]
-  },
-  "newComments": [
-    "Rule Add by Ansible"
-  ]
-}
+  }
+  {%   endif %}
+  {% endfor %}
+]
