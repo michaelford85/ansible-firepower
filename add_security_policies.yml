@@ -78,7 +78,7 @@
           Content-Type: application/json
           X-auth-access-token: "{{ auth_token }}"
         src: "{{ playbook_dir }}/new_acl.json"
-        status_code: 200
+        status_code: 201
         validate_certs: no
     - name: Delete Dynamically Generated JSON file
       file:
